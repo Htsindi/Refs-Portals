@@ -1,10 +1,22 @@
 import React from "react";
+import { useState, useRef } from "react";
 
 export default function TimerChallenge({ title, targetTime }) {
+
+  const timer = useRef();
+
+  const [timerStarted, setTimerStarted] = useState(false);
+  const [timerExpired, setTimerExpired] = useState(false);
+
   function handleStart() {
-    setTimeout(() => {
-      setTimeExpired(true);
+    timer.current = setTimeout(() => {
+      setTimerExpired(true);
     }, targetTime * 1000);
+    setTimerStarted(true);
+  }
+
+  function handleStop() {
+    clearTimeout(timer.current);
   }
 
   return;
@@ -15,8 +27,15 @@ export default function TimerChallenge({ title, targetTime }) {
       {targetTime} second{targetTime > 1 ? "s" : ""}
     </p>
     <p>
-      <button onClick={handleStart}>Start Challenge</button>
+      <button onClick={timerStarted ? handleStop : handleStart}>
+        {timerStarted ? "Stop" : "Start"}
+      </button>
     </p>
-    <p className="">Time is running.../ Timer inactive</p>
+    <p className={timerStarted ? "active" : " "}>
+      {timerStarted ? "Time is running..." : "Timer inactive"}
+    </p>
   </section>;
 }
+
+
+///setTimeout and clearTimeout are javascript built in functions
